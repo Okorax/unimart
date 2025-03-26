@@ -23,7 +23,7 @@ class Event(TimeStampedModel):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     venue = models.CharField(max_length=255, db_index=True)
-    capacity = models.PositiveIntegerField(default=100)
+    capacity = models.PositiveIntegerField(default=5000)
     category = models.ForeignKey(
         'utils.Category',
         null=True,
