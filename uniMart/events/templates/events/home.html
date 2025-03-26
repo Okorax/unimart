@@ -1,0 +1,106 @@
+{% extends "events/base.html" %}
+
+{% block nav %}
+<ul>
+    <li><a href="{% url 'home' %}" class="">Home</a></li>
+    <li><a href="#">P2P</a></li>
+    <li><a href="#">FreeLance</a></li>
+    <li><a href="{% url 'event-home' %}" class="active">Events</a></li>
+    <li><a href="{% url 'blog-home' %}">Blogs</a></li>
+    <li><a href="{% url 'home' %}#contact">Contact</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+</ul>
+{% endblock nav %}
+
+{% load static %}
+{% block content %}
+<div class="page-title" data-aos="fade">
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ol>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="current">Events</li>
+            </ol>
+        </div>
+    </nav>
+</div>
+
+<section id="blog-posts" class="blog-posts">
+    <div class="container">
+        <div class="row gy-4">
+            {% for event in events %}
+            <div class="col-lg-3">
+                <div class="card event-card shadow border-0">
+                    <img src="{{ event.thumbnail.image.url }}" class="card-img-top" alt="Event Image">
+                    <div class="event-date">
+                        <div class="fw-bold text-accent mb-1">{{ event.start_time|date:"M"|upper }}</div>
+                        <div class="h6 mb-0">{{ event.start_time|date:"d" }}</div>
+                    </div>
+                    <div class="event-status">
+                        {% if event.status == "planned" %}
+                        <span class="badge bg-success p-2">
+                            {{ event.status }}
+                        </span>
+                        {% elif event.status == "ongoing" %}
+                        <span class="badge bg-danger p-2">
+                            {{ event.status }}
+                        </span>
+                        {% elif event.status == "completed" %}
+                        <span class="badge bg-secondary p-2">
+                            {{ event.status }}
+                        </span>
+                        {% elif event.status == "canceled" %}
+                        <span class="badge bg-warning p-2">
+                            {{ event.status }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-accent mb-2">{{ event.category.name }}</span>
+                        <h5 class="card-title mb-1">{{ event.name }}</h5>
+                        <div class="d-flex align-items-center mb-1">
+                            <i class="bi bi-clock me-1 text-muted" style="font-size: 0.9rem;"></i>
+                            <span class="small">{{ event.start_time|date:"d, M" }} - {{ event.end_time|date:"d, M" }}</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-geo-alt me-1 text-muted" style="font-size: 0.9rem;"></i>
+                            <span class="small">{{ event.venue }}</span>
+                        </div>
+                        <div class="d-flex align-items-center border-top pt-2">
+                            <img src="{{ event.organizer.image.url }}" class="rounded-circle me-2" alt="Organizer"
+                                style="width: 36px; height: 36px;">
+                            <div>
+                                <div class="small text-muted">Hosted by</div>
+                                <div class="fw-bold small">{{ event.organizer.username }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pt-0" id="event-{{ event.id }}-footer">
+                        <div class="text-muted small">
+                            <i class="bi bi-people me-1"></i>
+                            {{ event.attendee_count }}/{{ event.capacity }}
+                        </div>
+                        {% if event.id in attending_event_ids %}
+                            <button class="btn btn-outline-custom btn-sm py-1 px-2" 
+                                    hx-post="{% url 'attend_event' event.id %}" 
+                                    hx-target="#event-{{ event.id }}-footer" 
+                                    hx-swap="outerHTML">
+                                <i class="bi bi-check-circle me-1"></i>Attending
+                            </button>
+                        {% else %}
+                            <button class="btn btn-custom btn-sm py-1 px-2" 
+                                    hx-post="{% url 'attend_event' event.id %}" 
+                                    hx-target="#event-{{ event.id }}-footer" 
+                                    hx-swap="outerHTML">
+                                <i class="bi bi-calendar-check me-1"></i>Attend
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

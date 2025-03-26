@@ -1,0 +1,103 @@
+services:
+  postgres_primary:
+    image: bitnami/postgresql:latest
+    container_name: postgres_primary
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=replicationuser
+      - POSTGRESQL_REPLICATION_PASSWORD=replicationpassword
+      - POSTGRESQL_USERNAME=postgresadmin
+      - POSTGRESQL_PASSWORD=admin123
+      - POSTGRESQL_DATABASE=web_app
+    volumes:
+      - postgres_primary_data:/bitnami/postgresql
+
+  postgres_replica:
+    image: bitnami/postgresql:latest
+    container_name: postgres_replica
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_MASTER_HOST=postgres_primary
+      - POSTGRESQL_REPLICATION_USER=replicationuser
+      - POSTGRESQL_REPLICATION_PASSWORD=replicationpassword
+      - POSTGRESQL_USERNAME=postgresadmin
+      - POSTGRESQL_PASSWORD=admin123
+    volumes:
+      - postgres_replica_data:/bitnami/postgresql
+    depends_on:
+      - postgres_primary
+
+  postgres_replica2:
+    image: bitnami/postgresql:latest
+    container_name: postgres_replica2
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_MASTER_HOST=postgres_primary
+      - POSTGRESQL_REPLICATION_USER=replicationuser
+      - POSTGRESQL_REPLICATION_PASSWORD=replicationpassword
+      - POSTGRESQL_USERNAME=postgresadmin
+      - POSTGRESQL_PASSWORD=admin123
+    volumes:
+      - postgres_replica2_data:/bitnami/postgresql
+    depends_on:
+      - postgres_primary
+
+  redis_master:
+    image: bitnami/redis:latest
+    container_name: redis_master
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_REPLICATION_MODE=master
+    volumes:
+      - redis_master_data:/bitnami/redis/data
+
+  redis_slave:
+    image: bitnami/redis:latest
+    container_name: redis_slave
+    environment:
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis_master
+      - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_slave_data:/bitnami/redis/data
+    depends_on:
+      - redis_master
+
+  app:
+    build: .
+    volumes:
+      - ./uniMart:/apps
+    environment:
+      - PRIMARY_DATABASE_URL=${PRIMARY_DATABASE_URL}
+      - REPLICA_DATABASE_URL=${REPLICA_DATABASE_URL}
+      - REPLICA2_DATABASE_URL=${REPLICA2_DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - REDIS_SLAVE_URL=${REDIS_SLAVE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+    depends_on:
+      - postgres_primary
+      - redis_master
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certs/cert.pem:/etc/ssl/certs/cert.pem
+      - ./certs/key.pem:/etc/ssl/private/key.pem
+      - ./uniMart/static:/app/static
+      - ./uniMart/media:/app/media
+    depends_on:
+      - app
+
+volumes:
+  postgres_primary_data:
+  postgres_replica_data:
+  postgres_replica2_data:
+  redis_master_data:
+  redis_slave_data:
