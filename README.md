@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Django](https://img.shields.io/badge/django-4.2+-green.svg)
+
 # A web app for uni students 
 
 ## Table of Contents
