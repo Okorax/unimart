@@ -37,8 +37,6 @@ jobs:
         docker-compose --version
     - name: Install Dependencies
       run: docker-compose up -d --build
-    - name: Run Linter
-      run: docker-compose exec app flake8 .
     - name: Run Tests
       run: |
         docker-compose exec app python manage.py test

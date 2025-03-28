@@ -26,8 +26,6 @@ class Tag(TimeStampedModel):
     def __str__(self):
         return self.name
 
-from django.db import models
-from django.utils.text import slugify
 
 class Category(TimeStampedModel):
     # Define choices for service types
@@ -90,6 +88,7 @@ class Category(TimeStampedModel):
         # Updated to include service type
         return f"{self.get_service_type_display()} - {self.name}"
 
+
 class SearchHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     query = models.CharField(max_length=255)
@@ -107,10 +106,12 @@ class SearchHistory(models.Model):
             username = self.user.username
         return f"{username} searched '{self.query}' in {self.hub.name}"
 
+
 def rename(instance, filename):
     upload_to = f'clients/{instance.name}/'
     ext = filename.split('.')[-1]
     return os.path.join(upload_to, f'{uuid4().hex}.{ext}')
+
 
 class Client(TimeStampedModel):
     name = models.CharField(max_length=100)
@@ -119,6 +120,7 @@ class Client(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
 
 class About(TimeStampedModel):
     name = models.CharField(max_length=100)
@@ -133,6 +135,7 @@ class About(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
 
 '''
 class Brand(TimeStampedModel):
