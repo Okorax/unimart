@@ -96,7 +96,7 @@ CACHES = {
 
 CELERY_BROKER_URL = os.getenv('REDIS_URL')
 CELERY_CACHE_BACKEND = 'default'
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL')
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -218,7 +218,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'home'
 
-SITE_NAME = 'schoolease'
+SITE_NAME = 'theHive'
 
 META_KEYWORDS = 'services, communities, events, blogs, freelancing, accommodations'
 META_DESCRIPTION = 'schoolease is an online provider of various solutions to the problems faced by university students'

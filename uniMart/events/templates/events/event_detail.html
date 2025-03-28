@@ -1,0 +1,17 @@
+{% extends "events/base.html" %}
+
+{% block nav %}
+<ul>
+    <li><a href="{% url 'home' %}" class="">Home</a></li>
+    <li><a href="#">P2P</a></li>
+    <li><a href="#">FreeLance</a></li>
+    <li><a href="{% url 'event-home' %}">Events</a></li>
+    <li><a href="{% url 'blog-home' %}">Blogs</a></li>
+    <li><a href="{% url 'home' %}#contact">Contact</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+</ul>
+{% endblock nav %}
+
+{% block content %}
+
+{% end block content %}

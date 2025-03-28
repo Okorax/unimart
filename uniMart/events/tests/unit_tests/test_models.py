@@ -250,7 +250,7 @@ class EventModelTest(TestCase):
 
     def test_event_image_creation(self):
         """Test that an EventImage is created correctly with default settings."""
-        image = EventImage.objects.create(event=self.event)
+        image = self.event.thumbnail
         self.assertEqual(image.event, self.event)
         self.assertTrue(image.is_thumbnail, "First image should be set as thumbnail")
         self.assertEqual(image.image.name, 'events/default.jpg', "Image should use default path")
@@ -270,7 +270,7 @@ class EventModelTest(TestCase):
 
     def test_non_thumbnail_image(self):
         """Test that adding a non-thumbnail image doesn't affect the existing thumbnail."""
-        image1 = EventImage.objects.create(event=self.event)
+        image1 = EventImage.objects.create(event=self.event, is_thumbnail=True)
         image2 = EventImage.objects.create(event=self.event)
         image1.refresh_from_db()
         self.assertTrue(image1.is_thumbnail, "First image should remain the thumbnail")
