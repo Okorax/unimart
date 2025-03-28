@@ -65,12 +65,10 @@ class Event(TimeStampedModel):
     def save(self, *args, **kwargs):
         self.clean()
         if not self.slug:
-            base_slug = slugify(f"{self.name}-{self.start_time.strftime('%Y%m%d')}")
+            base_slug = slugify(f"{self.name}-{self.start_time.strftime('%Y%m%d')}")[:90]
             slug = base_slug
-            counter = 1
-            while Event.objects.filter(hub=self.hub, slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
+            jitter = uuid4().hex[:8]
+            slug = f"{base_slug}-{jitter}"
             self.slug = slug
 
         if not self.pk:
@@ -127,7 +125,7 @@ class Event(TimeStampedModel):
         return f"{self.name} ({self.status})"
     
 def rename(instance, filename):
-    upload_to = f'events/{instance.event.name}/'
+    upload_to = f'events/{instance.event.slug}/'
     ext = filename.split('.')[-1]
     return os.path.join(upload_to, f'{uuid4().hex}.{ext}')
 
@@ -137,12 +135,12 @@ class EventImage(TimeStampedModel):
     is_thumbnail = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-
-        if EventImage.objects.filter(event=self.event).count() == 0:
+        if not self.pk and not EventImage.objects.filter(event=self.event).exists():
             self.is_thumbnail = True
 
         if self.is_thumbnail:
             EventImage.objects.filter(event=self.event).exclude(id=self.id).update(is_thumbnail=False)
+
         super().save(*args, **kwargs)
 
     def __str__(self):

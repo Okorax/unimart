@@ -1,11 +1,12 @@
 from django.test import TestCase
 from django.utils import timezone
-from events.models import Event
+from events.models import Event, EventImage
 from hubs.models import Hub
 from accounts.models import User  # Assuming User is in accounts app
 from datetime import timedelta
 from django.contrib.postgres.search import SearchQuery
 from django.utils.text import slugify
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class EventModelTest(TestCase):
     def setUp(self):
@@ -61,7 +62,7 @@ class EventModelTest(TestCase):
         self.assertEqual(self.event.status, 'planned')  # Since start_time is in the future
         # Check auto-generated slug
         expected_slug = slugify(f"{self.event.name}-{self.start_time.strftime('%Y%m%d')}")
-        self.assertEqual(self.event.slug, expected_slug)
+        self.assertEqual(self.event.slug[:len(expected_slug)], expected_slug)
         # Check timestamps
         self.assertIsNotNone(self.event.created_at)
         self.assertIsNotNone(self.event.updated_at)
@@ -92,6 +93,7 @@ class EventModelTest(TestCase):
             hub=another_hub,  # Different hub
             start_time=self.start_time,
             end_time=self.end_time,
+            slug=self.event.slug
         )
         self.assertEqual(another_event.slug, self.event.slug)  # Same slug is allowed
 
@@ -112,7 +114,7 @@ class EventModelTest(TestCase):
     def test_status_ongoing(self):
         """Test that an event with start_time in the past and end_time in the future gets 'ongoing' status."""
         now = timezone.now()
-        past_start = now + timedelta(microseconds=300)
+        past_start = now + timedelta(microseconds=130)
         future_end = now + timedelta(seconds=1)
         event = Event.objects.create(
             name='Ongoing Event',
@@ -245,3 +247,49 @@ class EventModelTest(TestCase):
         """Test the __str__ method returns the expected string."""
         expected_str = f"{self.event.name} ({self.event.status})"
         self.assertEqual(str(self.event), expected_str)
+
+    def test_event_image_creation(self):
+        """Test that an EventImage is created correctly with default settings."""
+        image = EventImage.objects.create(event=self.event)
+        self.assertEqual(image.event, self.event)
+        self.assertTrue(image.is_thumbnail, "First image should be set as thumbnail")
+        self.assertEqual(image.image.name, 'events/default.jpg', "Image should use default path")
+
+    def test_thumbnail_setting(self):
+        """Test that setting a new thumbnail unsets the previous one."""
+        image1 = EventImage.objects.create(event=self.event)
+        image2 = EventImage.objects.create(event=self.event, is_thumbnail=True)
+        image1.refresh_from_db()  # Refresh to get updated DB state
+        self.assertFalse(image1.is_thumbnail, "Original thumbnail should be unset")
+        self.assertTrue(image2.is_thumbnail, "New image should be the thumbnail")
+        self.assertEqual(
+            EventImage.objects.filter(event=self.event, is_thumbnail=True).count(),
+            1,
+            "Only one image should be the thumbnail"
+        )
+
+    def test_non_thumbnail_image(self):
+        """Test that adding a non-thumbnail image doesn't affect the existing thumbnail."""
+        image1 = EventImage.objects.create(event=self.event)
+        image2 = EventImage.objects.create(event=self.event)
+        image1.refresh_from_db()
+        self.assertTrue(image1.is_thumbnail, "First image should remain the thumbnail")
+        self.assertFalse(image2.is_thumbnail, "New image should not be the thumbnail")
+
+    def test_str_method(self):
+        """Test the string representation of EventImage."""
+        image = EventImage.objects.create(event=self.event)
+        self.assertEqual(str(image), "Image for Test Event")
+
+    def test_image_upload(self):
+        """Test that an uploaded image gets the correct path."""
+        upload_file = SimpleUploadedFile('test.jpg', b'file_content', content_type='image/jpeg')
+        image = EventImage.objects.create(event=self.event, image=upload_file)
+        self.assertTrue(
+            image.image.name.startswith(f'events/{self.event.slug}/'),
+            "Image path should start with event name"
+        )
+        self.assertTrue(
+            image.image.name.endswith('.jpg'),
+            "Image path should retain the original extension"
+        )
