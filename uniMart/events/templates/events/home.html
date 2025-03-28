@@ -22,6 +22,12 @@
                 <li class="current">Events</li>
             </ol>
         </div>
+        <span class="float-end">
+            <form action="{% url 'event-search' %}" method="get">
+                <input type="search" name="events-search" id="events-search"/>
+                <button type="submit">Search</button>
+            </form>
+        </span>
     </nav>
 </div>
 

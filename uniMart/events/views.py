@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Event
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.postgres.search import SearchQuery
 
 # Create your views here.
 
@@ -17,6 +18,11 @@ def home(request):
         'events': events,
         'attending_event_ids': attending_event_ids
     })
+
+def search(request):
+    q = request.GET.get("events-search")
+    events = Event.objects.filter(search_vector=SearchQuery(q))
+    return render(request, "events/home.html", {"events": events})
 
 @csrf_exempt
 def attend_event(request, event_id):

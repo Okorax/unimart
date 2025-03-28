@@ -39,27 +39,5 @@ class Migration(migrations.Migration):
                 'indexes': [django.contrib.postgres.indexes.GinIndex(fields=['search_vector'], name='post_search_idx')],
                 'unique_together': {('hub', 'slug')},
             },
-        ),
-        migrations.RunSQL(
-            """
-            CREATE FUNCTION update_post_search_vector() RETURNS trigger AS $$
-            BEGIN
-                NEW.search_vector := (
-                    setweight(to_tsvector('english', NEW.title), 'A') ||
-                    setweight(to_tsvector('english', NEW.content), 'B')
-                );
-                RETURN NEW;
-            END;
-            $$ LANGUAGE plpgsql;
-
-            CREATE TRIGGER post_search_vector_trigger
-            BEFORE INSERT OR UPDATE OF title, content
-            ON blogs_post
-            FOR EACH ROW EXECUTE FUNCTION update_post_search_vector();
-            """,
-            reverse_sql="""
-            DROP TRIGGER IF EXISTS post_search_vector_trigger ON blogs_post;
-            DROP FUNCTION IF EXISTS update_post_search_vector;
-            """
         )
     ]
