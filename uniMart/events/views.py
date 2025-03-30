@@ -29,8 +29,8 @@ def search(request):
     return render(request, "events/home.html", {"events": events})
 
 @csrf_exempt
-def attend_event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
+def attend_event(request, event_slug):
+    event = get_object_or_404(Event, slug=event_slug)
     if request.method == "POST" and request.user.is_authenticated:
         # Add user to attendees (assuming a ManyToManyField named 'attendees')
         if request.user in event.attendees.all():

@@ -2886,10 +2886,8 @@ section,
 .event-card {
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
-  width: 14rem;
-  /* Further reduced width */
-  max-height: 380px;
-  /* Added max-height constraint */
+  width: 100%; /* Ensure cards fill their column */
+  max-width: 100%; /* Prevent overflow on mobile */
 }
 
 .event-card:hover {
@@ -2960,4 +2958,9 @@ section,
 
 .text-accent {
   color: var(--accent-color) !important;
+}
+
+.hero-section {
+  background-color: #f8f9fa;
+  padding: 2rem 0;
 }
