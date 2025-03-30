@@ -2868,6 +2868,21 @@ section,
   color: var(--accent-color);
 }
 
+.form-control-custom:focus {
+  /*box-shadow: none !important;
+   Remove the default blue border */
+  -webkit-box-shadow: 0 0 0 .25rem #f7bbbb !important;
+  box-shadow: 0 0 0 .25rem #f7bbbb !important;
+  border-color: #ee7777 !important;
+  outline: 0;
+}
+
+.form-control-custom.is-invalid:focus {
+  border-color: var(--bs-form-invalid-border-color) !important;
+  -webkit-box-shadow: 0 0 0 .25rem #dc3545a1 !important;
+  box-shadow: 0 0 0 .25rem #dc3545a1 !important;
+}
+
 .event-card {
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;

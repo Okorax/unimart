@@ -31,7 +31,8 @@ class Category(TimeStampedModel):
     # Define choices for service types
     SERVICE_TYPE_CHOICES = [
         ('events', 'Events'),
-        ('services', 'Services'),
+        ('p2p', 'P2P'),
+        ('freelance', 'Freelance'),
         ('blogs', 'Blogs'),
         ('communities', 'Communities')
     ]

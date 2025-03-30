@@ -16,18 +16,26 @@
 {% block content %}
 <div class="page-title" data-aos="fade">
     <nav class="breadcrumbs">
-        <div class="container">
+        <div class="container d-flex align-items-center">
             <ol>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li class="current">Events</li>
             </ol>
+            <span class="ms-auto">
+                <form action="{% url 'event-search' %}" method="get">
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-control form-control-sm form-control-custom" type="search"
+                                name="events-search" id="events-search" />
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-outline-custom btn-sm" type="submit">Search <i
+                                    class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </span>
         </div>
-        <span class="float-end">
-            <form action="{% url 'event-search' %}" method="get">
-                <input type="search" name="events-search" id="events-search"/>
-                <button type="submit">Search</button>
-            </form>
-        </span>
     </nav>
 </div>
 
@@ -36,7 +44,9 @@
         <div class="row gy-4">
             {% for event in events %}
             <div class="col-lg-3">
-                <div class="card event-card shadow border-0">
+                <div class="card event-card shadow border-0 h-100" style="cursor: pointer;"
+                    data-url="{% url 'event-detail' event.slug %}"
+                    onclick="window.location.href=this.getAttribute('data-url');">
                     <img src="{{ event.thumbnail.image.url }}" class="card-img-top" alt="Event Image">
                     <div class="event-date">
                         <div class="fw-bold text-accent mb-1">{{ event.start_time|date:"M"|upper }}</div>
@@ -82,25 +92,24 @@
                         </div>
                     </div>
 
-                    <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pt-0" id="event-{{ event.id }}-footer">
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pt-0"
+                        id="event-{{ event.id }}-footer">
                         <div class="text-muted small">
                             <i class="bi bi-people me-1"></i>
                             {{ event.attendee_count }}/{{ event.capacity }}
                         </div>
                         {% if event.id in attending_event_ids %}
-                            <button class="btn btn-outline-custom btn-sm py-1 px-2" 
-                                    hx-post="{% url 'attend_event' event.id %}" 
-                                    hx-target="#event-{{ event.id }}-footer" 
-                                    hx-swap="outerHTML">
-                                <i class="bi bi-check-circle me-1"></i>Attending
-                            </button>
+                        <button class="btn btn-outline-custom btn-sm py-1 px-2"
+                            hx-post="{% url 'attend_event' event.id %}" hx-target="#event-{{ event.id }}-footer"
+                            hx-swap="outerHTML" onclick="event.stopPropagation();">
+                            <i class="bi bi-check-circle me-1"></i>Attending
+                        </button>
                         {% else %}
-                            <button class="btn btn-custom btn-sm py-1 px-2" 
-                                    hx-post="{% url 'attend_event' event.id %}" 
-                                    hx-target="#event-{{ event.id }}-footer" 
-                                    hx-swap="outerHTML">
-                                <i class="bi bi-calendar-check me-1"></i>Attend
-                            </button>
+                        <button class="btn btn-custom btn-sm py-1 px-2" hx-post="{% url 'attend_event' event.id %}"
+                            hx-target="#event-{{ event.id }}-footer" hx-swap="outerHTML"
+                            onclick="event.stopPropagation();">
+                            <i class="bi bi-calendar-check me-1"></i>Attend
+                        </button>
                         {% endif %}
                     </div>
                 </div>

@@ -32,7 +32,7 @@
       <div class="col-lg-4">
         <article>
           <div class="post-img">
-            <img src="{% static 'assets/img/blog/blog-1.jpg' %}" alt="" class="img-fluid">
+            <img src="{{ post.thumbnail.image.url }}" alt="" class="img-fluid">
           </div>
           <p class="post-category">{{ post.category.name }}</p>
           <h4 class="title">

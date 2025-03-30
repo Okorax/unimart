@@ -182,7 +182,7 @@
     color: var(--accent-color);
   }
   
-  .form-control:focus {
+  .form-control-custom:focus {
     /*box-shadow: none !important;
      Remove the default blue border */
     -webkit-box-shadow: 0 0 0 .25rem #f7bbbb !important;
@@ -191,7 +191,7 @@
     outline: 0;
   }
   
-  .form-control.is-invalid:focus {
+  .form-control-custom.is-invalid:focus {
     border-color: var(--bs-form-invalid-border-color) !important;
     -webkit-box-shadow: 0 0 0 .25rem #dc3545a1 !important;
     box-shadow: 0 0 0 .25rem #dc3545a1 !important;

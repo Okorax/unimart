@@ -76,8 +76,8 @@
           <div class="container">
             <div class="row">
               <div class="col-lg-10">
-                <h2 data-aos="fade-up" data-aos-delay="100">Welcome to schoolease</h2>
-                <p data-aos="fade-up" data-aos-delay="200">We are here for your needs...</p>
+                <h2 data-aos="fade-up" data-aos-delay="100">Welcome to {{ site_name }}</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Your All-in-One Hub for Meaningful Collaboration</p>
               </div>
               <div class="col-lg-5">
                 <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300">
@@ -259,8 +259,8 @@
         <div class="col-lg-2 col-6 footer-links">
           <h4>Useful Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Terms of service</a></li>
             <li><a href="#">Privacy policy</a></li>
@@ -270,11 +270,10 @@
         <div class="col-lg-2 col-6 footer-links">
           <h4>Our Services</h4>
           <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
+            <li><a href="#">P2P</a></li>
+            <li><a href="#">Freelance</a></li>
+            <li><a href="{% url 'event-home' %}">Event</a></li>
+            <li><a href="{% url 'blog-home' %}">Blog</a></li>
           </ul>
         </div>
 

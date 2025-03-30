@@ -13,5 +13,63 @@
 {% endblock nav %}
 
 {% block content %}
+<div class="page-title" data-aos="fade">
+    <nav class="breadcrumbs">
+        <div class="container d-flex align-items-center">
+            <ol>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'event-home' %}">{{ event.category.name }}</a></li>
+                <li class="current">{{ event.name }}</li>
+            </ol>
+        </div>
+    </nav>
+</div>
 
-{% end block content %}
+<!-- Hero Section with Image and Key Details -->
+<div class="container">
+    <div class="row hero-section py-4">
+        <div class="col-md-6">
+            <img src="{{ event.thumbnail.image.url }}" class="img-fluid item-image" alt="{{ event.name }}">
+        </div>
+        <div class="col-md-6">
+            <h1>{{ event.name }}</h1>
+            <p>
+                <span class="badge bg-accent">{{ event.category.name }}</span>
+                {% if event.status == "planned" %}
+                    <span class="badge bg-success">{{ event.status }}</span>
+                {% elif event.status == "ongoing" %}
+                    <span class="badge bg-danger">{{ event.status }}</span>
+                {% elif event.status == "completed" %}
+                    <span class="badge bg-secondary">{{ event.status }}</span>
+                {% elif event.status == "canceled" %}
+                    <span class="badge bg-warning">{{ event.status }}</span>
+                {% endif %}
+            </p>
+            <div class="seller-info d-flex align-items-center">
+                <img src="{{ event.organizer.image.url }}" alt="{{ event.organizer.username }} Avatar" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+                <div>
+                    <p class="mb-0"><strong>Posted by: {{ event.organizer.username }}</strong></p>
+                    <p class="text-muted mb-0"><i class="bi bi-geo-alt"></i> {{ event.venue }}</p>
+                    <p class="text-muted mb-0"><i class="bi bi-calendar"></i> {{ event.updated_at|date:"F d, Y" }}</p>
+                </div>
+            </div>
+            <button class="btn btn-custom mt-3" 
+                    hx-post="{% url 'attend_event' event.id %}" 
+                    hx-target="#event-attend-button" 
+                    hx-swap="outerHTML"
+                    id="event-attend-button">
+                Attend
+            </button>
+        </div>
+    </div>
+
+    <!-- Description Section -->
+    <div class="row description py-4">
+        <div class="col-12">
+            <h3>Description</h3>
+            <p>{{ event.description }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

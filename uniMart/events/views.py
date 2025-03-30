@@ -19,6 +19,10 @@ def home(request):
         'attending_event_ids': attending_event_ids
     })
 
+def detail(request, slug):
+    event = get_object_or_404(Event, slug=slug)
+    return render(request, "events/event_detail.html", {"event": event})
+
 def search(request):
     q = request.GET.get("events-search")
     events = Event.objects.filter(search_vector=SearchQuery(q))

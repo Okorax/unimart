@@ -56,12 +56,6 @@ class PostModelTest(TestCase):
                 slug='django-basics'
             )
 
-    def test_search_vector_update(self):
-        post = Post.objects.get(id=self.post.id)
-        self.assertTrue(post.search_vector)
-        results = Post.objects.filter(search_vector=SearchQuery('django'))
-        self.assertIn(post, results)
-
     def test_tags_relationship(self):
         self.assertIn(self.tag, self.post.tags.all())
         self.assertEqual(self.post.tags.count(), 1)

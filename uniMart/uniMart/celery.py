@@ -18,4 +18,8 @@ app.conf.beat_schedule = {
         'task': 'events.tasks.update_event_search_vectors',
         'schedule': 300.0,  # 300 seconds = 5 minutes
     },
+    'update-post-search_vectors-every-5-minutes': {
+        'task': 'blogs.tasks.update_post_search_vectors',
+        'schedule': 300.0,  # 300 seconds = 5 minutes
+    }
 }

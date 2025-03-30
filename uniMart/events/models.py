@@ -46,11 +46,7 @@ class Event(TimeStampedModel):
     class Meta:
         unique_together = ('hub', 'slug')
         indexes = [
-            models.Index(fields=['start_time']),
-            models.Index(fields=['end_time']),
-            models.Index(fields=['status']),
-            models.Index(fields=['name']),
-            models.Index(fields=['venue']),
+            models.Index(fields=['start_time', 'end_time', 'status', 'name', 'venue']),
             GinIndex(fields=['search_vector'], name='event_search_idx'),
         ]
         ordering = ['-updated_at']
