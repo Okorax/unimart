@@ -69,7 +69,7 @@ def rename(instance, filename):
 
 class PostImage(TimeStampedModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=rename, default='blogs/default.jpg')
+    image = models.ImageField(upload_to=rename, default='blogs/default.png')
     is_thumbnail = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
