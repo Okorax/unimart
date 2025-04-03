@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'accounts.apps.AccountsConfig',
     'hubs.apps.HubsConfig',
-    #'services.apps.ServicesConfig',
+    'subscriptions.apps.SubscriptionsConfig',
     'events.apps.EventsConfig',
     'blogs.apps.BlogsConfig',
     'utils.apps.UtilsConfig',
@@ -173,6 +173,14 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_LOGIN_METHODS = {'email'}
 
+# settings.py
+OPAY_MERCHANT_ID = "256625040394805"
+OPAY_PUBLIC_KEY = "OPAYPUB17436508244090.51312797500035"
+OPAY_SECRET_KEY = "OPAYPRV17436508244090.8412693639224904"
+#OPAY_API_URL = "https://liveapi.opaycheckout.com/api/v1/international/payment/create"  # Use sandbox URL for testing: 
+OPAY_API_URL = "https://testapi.opaycheckout.com/api/v1"
+SITE_URL = "http://localhost:8000"  # Update to your production URL later
+
 '''
 if not env('DEBUG'):
     EMAIL_BACKEND = env('EMAIL_BACKEND')
@@ -218,6 +226,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 SITE_NAME = 'theHive'
 
