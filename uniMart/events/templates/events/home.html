@@ -3,7 +3,7 @@
 {% block nav %}
 <ul>
     <li><a href="{% url 'home' %}" class="">Home</a></li>
-    <li><a href="#">P2P</a></li>
+    <li><a href="{% url 'p2p-home' %}">P2P</a></li>
     <li><a href="#">FreeLance</a></li>
     <li><a href="{% url 'event-home' %}" class="active">Events</a></li>
     <li><a href="{% url 'blog-home' %}">Blogs</a></li>
@@ -25,12 +25,10 @@
                 <form action="{% url 'event-search' %}" method="get">
                     <div class="row">
                         <div class="col">
-                            <input class="form-control form-control-sm form-control-custom" type="search"
-                                name="events-search" id="events-search" />
+                            <input class="form-control form-control-sm form-control-custom" type="search" name="events-search" id="events-search" />
                         </div>
                         <div class="col">
-                            <button class="btn btn-outline-custom btn-sm" type="submit">Search <i
-                                    class="bi bi-search"></i></button>
+                            <button class="btn btn-outline-custom btn-sm" type="submit">Search <i class="bi bi-search"></i></button>
                         </div>
                     </div>
                 </form>

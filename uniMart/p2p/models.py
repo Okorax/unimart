@@ -8,7 +8,6 @@ from django.contrib.postgres.indexes import GinIndex
 from utils.models import TimeStampedModel
 from accounts.models import User
 
-# Create your models here.
 class Product(TimeStampedModel):
     CONDITION_CHOICES = [
         ('new', 'New'),
@@ -87,7 +86,7 @@ def rename(instance, filename):
 
 class ProductImage(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=rename, default='p2p/default.jpg')
+    image = models.ImageField(upload_to=rename, default='p2p/default.png')
     is_thumbnail = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -95,11 +94,10 @@ class ProductImage(TimeStampedModel):
             self.is_thumbnail = True
 
         if self.is_thumbnail:
-            ProductImage.objects.filter(event=self.event).exclude(id=self.id).update(is_thumbnail=False)
+            ProductImage.objects.filter(product=self.product).exclude(id=self.id).update(is_thumbnail=False)
 
         super().save(*args, **kwargs)
 
-# PurchaseRequest model with negotiation and messaging
 class PurchaseRequest(TimeStampedModel):
     STATUS_CHOICES = [
         ('pending', 'Pending'),

@@ -34,6 +34,7 @@ CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1', 'https://192.168.157.156']
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django_extensions',
     'debug_toolbar',
     'crispy_forms',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'subscriptions.apps.SubscriptionsConfig',
     'events.apps.EventsConfig',
     'blogs.apps.BlogsConfig',
+    'p2p.apps.P2PConfig',
     'utils.apps.UtilsConfig',
     'django.contrib.sites',
     'django.contrib.admin',

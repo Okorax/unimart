@@ -1,14 +1,15 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import Post, PostImage
-
-# Register your models here.
 
 class PostImageInline(admin.TabularInline):
     model = PostImage
     extra = 1  # Number of empty forms to display
 
 @admin.register(Post)
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(ModelAdmin):
     inlines = [PostImageInline]
 
-admin.site.register(PostImage)
+@admin.register(PostImage)
+class PostImageModel(ModelAdmin):
+    pass

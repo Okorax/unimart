@@ -4,8 +4,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from .tasks import resize_image
 
-# Create your models here.
-
 def rename(instance, filename):
     upload_to = f'profile_pics/{instance.username}/'
     ext = filename.split('.')[-1]
@@ -26,6 +24,8 @@ class User(AbstractUser):
         choices=GENDER_CHOICES,
         blank=False,  # Not allowing the field to be blank
     )
+    phone_number = models.CharField(max_length=25, null=True)
+    bio = models.TextField(null=True, blank=True)
     date_of_birth = models.DateField(blank=False, help_text="Required.", verbose_name="date of birth")
     hub = models.ForeignKey('hubs.Hub', on_delete=models.PROTECT, null=True, related_name='users')
     image = models.ImageField(

@@ -1,0 +1,97 @@
+{% extends "events/base.html" %}
+
+{% block nav %}
+<ul>
+    <li><a href="{% url 'home' %}" class="">Home</a></li>
+    <li><a href="{% url 'p2p-home' %}">P2P</a></li>
+    <li><a href="#">FreeLance</a></li>
+    <li><a href="{% url 'event-home' %}" class="active">Events</a></li>
+    <li><a href="{% url 'blog-home' %}">Blogs</a></li>
+    <li><a href="{% url 'home' %}#contact">Contact</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+</ul>
+{% endblock nav %}
+
+{% load static %}
+{% block content %}
+<div class="page-title" data-aos="fade">
+    <nav class="breadcrumbs">
+        <div class="container d-flex align-items-center">
+            <ol>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="current">Products</li>
+            </ol>
+            <span class="ms-auto">
+                <form action="{% url 'product-search' %}" method="get">
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-control form-control-sm form-control-custom" type="search" name="products-search" id="products-search" />
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-outline-custom btn-sm" type="submit">Search <i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </span>
+        </div>
+    </nav>
+</div>
+
+<section id="blog-posts" class="blog-posts">
+    <div class="container mt-2">
+        <div class="row gy-4">
+            {% for product in products %}
+            <div class="col-12 col-lg-3 py-4">
+                <div class="card event-card shadow border-0 h-100" style="cursor: pointer;"
+                    data-url="#"
+                    onclick="window.location.href=this.getAttribute('data-url');">
+                    <img src="{{ product.thumbnail.image.url }}" class="card-img-top" alt="Product Image">
+                   
+                    <div class="card-body">
+                        <span class="badge bg-accent mb-2">{{ product.category.name }}</span>
+                        <h5 class="card-title mb-1">{{ product.name }}</h5>
+                        <div class="d-flex align-items-center mb-1">
+                            <i class="bi bi-clock me-1 text-muted" style="font-size: 0.9rem;"></i>
+                            <span class="small">{{ product.price }}</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-geo-alt me-1 text-muted" style="font-size: 0.9rem;"></i>
+                            <span class="small">{{ product.pickup_location }}</span>
+                        </div>
+                        <div class="d-flex align-items-center border-top pt-2">
+                            <img src="{{ product.seller.image.url }}" class="rounded-circle me-2" alt="Seller"
+                                style="width: 36px; height: 36px;">
+                            <div>
+                                <div class="small text-muted">Vendor: </div>
+                                <div class="fw-bold small">{{ product.seller.username }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center pt-0"
+                        id="product-{{ product.slug }}-footer">
+                        {% if product.id in request.user.buy_requests.product %}
+                        <button class="btn btn-outline-custom btn-sm py-1 px-2"
+                            hx-post="{% url 'make_request' product.slug %}" 
+                            hx-target="#product-{{ product.slug }}-footer"
+                            hx-swap="outerHTML" 
+                            onclick="event.stopPropagation();">
+                            <i class="bi bi-check-circle me-1"></i>undo request
+                        </button>
+                        {% else %}
+                        <button class="btn btn-custom btn-sm py-1 px-2" 
+                            hx-post="{% url 'make_request' product.slug %}"
+                            hx-target="#product-{{ product.slug }}-footer" 
+                            hx-swap="outerHTML"
+                            onclick="event.stopPropagation();">
+                            <i class="bi bi-calendar-check me-1"></i>Request
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

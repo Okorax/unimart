@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import Event, EventImage
 
 # Register your models here.
@@ -7,8 +8,7 @@ class EventImageInline(admin.TabularInline):
     extra = 1  # Number of empty forms to display
 
 @admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(ModelAdmin):
     inlines = [EventImageInline]
 
-#admin.site.register(Event)
-admin.site.register(EventImage)
+admin.site.register(EventImage, ModelAdmin)

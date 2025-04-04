@@ -1,9 +1,18 @@
 from .models import User
 from .forms import UserRegisterForm
+from unfold.admin import ModelAdmin
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 
-class UserAdmin(BaseUserAdmin):
+admin.site.unregister(Group)
+
+@admin.register(Group)
+class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+    pass
+
+class UserAdmin(BaseUserAdmin, ModelAdmin):
     # The forms to add and change user instances
     add_form = UserRegisterForm
 
