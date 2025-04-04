@@ -4,90 +4,93 @@
 {% load static %}
 
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="{{ meta_description }}" name="description">
-    <meta content="{{ meta_keywords }}" name="keywords">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="{{ meta_description }}" name="description">
+  <meta content="{{ meta_keywords }}" name="keywords">
 
-    <!-- Favicons -->
-    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
-    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
 
-    <!-- Vendor CSS Files -->
-    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
 
-    <!-- Main CSS File -->
-    <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
 
-    <!-- Page title -->
-    {% if title %}
-    <title>{{ site_name }}. {{ title }}</title>
-    {% else %}
-    <title>{{ site_name }}.</title>
-    {% endif %}
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main2.css' %}" rel="stylesheet">
+
+  <!-- Page title -->
+  {% if title %}
+  <title>{{ site_name }}. {{ title }}</title>
+  {% else %}
+  <title>{{ site_name }}.</title>
+  {% endif %}
 
 </head>
 
 <body class="index-page">
-    <header id="header" class="header d-flex align-items-center fixed-top">
-        <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
-    
-          <a href="#" class="logo d-flex align-items-center me-auto me-xl-0">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="assets/img/logo.png" alt=""> -->
-            <h1 class="sitename">{{ site_name }}</h1><span>.</span>
-          </a>
-    
-          <nav id="navmenu" class="navmenu">
-            <ul>
-              <li><a href="{% url 'home' %}" class="">Home</a></li>
-              <li><a href="#">P2P</a></li>
-              <li><a href="#">FreeLance</a></li>
-              <li><a href="{% url 'event-home' %}">Events</a></li>
-              <li><a href="{% url 'blog-home' %}">Blogs</a></li>
-              <li><a href="index.html#contact">Contact</a></li>
-              <li><a href="{% url 'about' %}">About</a></li>
-            </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-          </nav>
-    
-          {% if not user.is_authenticated %}
-          <a class="btn-getstarted" href="{% url 'accounts-register' %}">Sign Up</a>
-          {% else %}
-          <a class="btn-getstarted" href="#">Sign Out</a>
-          {% endif %}
-    
-        </div>
-    </header>
-    <main class="main">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-      <!-- Hero Section -->
-        <section id="hero" class="hero section">
-    
-          <img src="{% static 'assets/img/hero-bg.jpg' %}" alt="" loading="lazy" data-aos="fade-in">
-    
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-10">
-                <h2 data-aos="fade-up" data-aos-delay="100">Welcome to {{ site_name }}</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Your All-in-One Hub for Meaningful Collaboration</p>
-              </div>
-              <div class="col-lg-5">
-                <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300">
-                  <input type="text" class="form-control" placeholder="Enter text to search">
-                  <input type="submit" class="btn btn-primary" value="Search">
-                </form>
-              </div>
+      <a href="#" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="sitename">{{ site_name }}</h1><span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'home' %}" class="">Home</a></li>
+          <li><a href="#">P2P</a></li>
+          <li><a href="#">FreeLance</a></li>
+          <li><a href="{% url 'event-home' %}">Events</a></li>
+          <li><a href="{% url 'blog-home' %}">Blogs</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      {% if user.is_authenticated %}
+      <form action="{% url 'accounts-logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn-getstarted">Sign Out</button>
+      </form>
+      {% else %}
+      <a class="btn-getstarted" href="{% url 'accounts-register' %}">Sign Up</a>
+      {% endif %}
+
+    </div>
+  </header>
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <img src="{% static 'assets/img/hero-bg.jpg' %}" alt="" loading="lazy" data-aos="fade-in">
+
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10">
+            <h2 data-aos="fade-up" data-aos-delay="100">Welcome to {{ site_name }}</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Your All-in-One Hub for Meaningful Collaboration</p>
           </div>
-    
-        </section><!-- /Hero Section -->
+          <div class="col-lg-5">
+            <form action="#" class="sign-up-form d-flex" data-aos="fade-up" data-aos-delay="300">
+              <input type="text" class="form-control" placeholder="Enter text to search">
+              <input type="submit" class="btn btn-primary" value="Search">
+            </form>
+          </div>
+        </div>
+
+    </section><!-- /Hero Section -->
 
     <!-- Clients Section -->
     <section id="clients" class="clients section">
@@ -95,11 +98,11 @@
       <div class="container" data-aos="fade-up">
 
         <div class="row gy-4">
-        {% for client in clients %}
+          {% for client in clients %}
           <div class="col-xl-2 col-md-3 col-6 client-logo">
             <img src="{% static client %}" class="img-fluid" alt="">
           </div><!-- End Client Item -->
-        {% endfor %}
+          {% endfor %}
         </div>
 
       </div>
@@ -126,7 +129,8 @@
             <div class="row gy-4 icon-boxes">
               {% for about in abouts %}
               {% if not about.header %}
-              <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+              <div class="col-md-6" data-aos="fade-up" data-aos-delay="200" data-url="{% url 'about' %}#{{ about.url }}"
+                onclick="window.location.href=this.getAttribute('data-url');">
                 <div class="icon-box">
                   <i class="bi {{ about.icon }}"></i>
                   <h3>{{ about.name }}</h3>
@@ -163,8 +167,8 @@
                 <div class="info-item" data-aos="fade" data-aos-delay="200">
                   <i class="bi bi-geo-alt"></i>
                   <h3>Address</h3>
-                  <p>A108 Adam Street</p>
-                  <p>New York, NY 535022</p>
+                  <p>Futo</p>
+                  <p>Owerri, Imo state</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -172,8 +176,8 @@
                 <div class="info-item" data-aos="fade" data-aos-delay="300">
                   <i class="bi bi-telephone"></i>
                   <h3>Call Us</h3>
-                  <p>+1 5589 55488 55</p>
-                  <p>+1 6678 254445 41</p>
+                  <p>+234 8169 9760 46</p>
+                  <p>+234 8116 4471 26</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -181,8 +185,8 @@
                 <div class="info-item" data-aos="fade" data-aos-delay="400">
                   <i class="bi bi-envelope"></i>
                   <h3>Email Us</h3>
-                  <p>info@example.com</p>
-                  <p>contact@example.com</p>
+                  <p>admin@thehive.com</p>
+                  <p>customerservice@thehive.com</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -247,7 +251,8 @@
           <a href="{% url 'home' %}" class="logo d-flex align-items-center">
             <span class="sitename">{{ site_name }}.</span>
           </a>
-          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta
+            donna mare fermentum iaculis eu non diam phasellus.</p>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
@@ -279,33 +284,35 @@
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
           <h4>Contact Us</h4>
-          <p>A108 Adam Street</p>
-          <p>New York, NY 535022</p>
-          <p>United States</p>
+          <p>Futo</p>
+          <p>Owerri, Imo state</p>
+          <p>Nigeria</p>
           <p class="mt-4"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-          <p><strong>Email:</strong> <span>info@example.com</span></p>
+          <p><strong>Email:</strong> <span>customerservice@thehive.com</span></p>
         </div>
 
       </div>
     </div>
 
     <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="sitename">{{ site_name }}.</strong> <span>All Rights Reserved</span></p>
+      <p>© <span>Copyright</span> <strong class="sitename">{{ site_name }}.</strong> <span>All Rights Reserved</span>
+      </p>
     </div>
 
   </footer>
 
-    <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Preloader -->
-    <div id="preloader"></div>
+  <!-- Preloader -->
+  <div id="preloader"></div>
 
-    <!-- Vendor JS Files -->
-    <script src="{% static 'assets/js/users.js' %}"></script>
-    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/htmx/htmx.min.js' %}" defer></script>
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/js/users.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/htmx/htmx.min.js' %}" defer></script>
 </body>
 
 </html>

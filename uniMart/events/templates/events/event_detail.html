@@ -20,7 +20,8 @@
         <div class="container d-flex align-items-center">
             <ol>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'event-home' %}">{{ event.category.name }}</a></li>
+                <li><a href="{% url 'event-home' %}">Events</a></li>
+                <li><a href="{% url 'event-home' %}?category={{ event.category.slug }}">{{ event.category.name }}</a></li>
                 <li class="current">{{ event.name }}</li>
             </ol>
         </div>

@@ -1,0 +1,17 @@
+{% extends "hubs/base.html" %}
+{% block content %}
+<h2>Subscribe to {{ plan.name }} Plan</h2>
+<p>Price: ₦{{ plan.price }}</p>
+<h3>Benefits:</h3>
+<ul>
+    {% for item in items %}
+    <li>{{ item.content }}</li>
+    {% empty %}
+    <li>No additional benefits listed.</li>
+    {% endfor %}
+</ul>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Pay with OPay</button>
+</form>
+{% endblock %}

@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from uniMart.settings import DEBUG
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,8 +24,11 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path('blogs/', include('blogs.urls')),
     path('', include('hubs.urls')),
-    path('__debug__/', include('debug_toolbar.urls'))
+    path('plan/', include('subscriptions.urls'))
 ]
+
+if DEBUG:
+    urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
 
 admin.site.site_header = "uniMart. Admin"
 admin.site.site_title = "uniMart. Admin Portal"

@@ -28,7 +28,6 @@ class Tag(TimeStampedModel):
 
 
 class Category(TimeStampedModel):
-    # Define choices for service types
     SERVICE_TYPE_CHOICES = [
         ('events', 'Events'),
         ('p2p', 'P2P'),
@@ -47,7 +46,6 @@ class Category(TimeStampedModel):
         help_text="If set, this category is specific to a hub; if null, it’s global."
     )
     
-    # New service_type field
     service_type = models.CharField(
         max_length=20,
         choices=SERVICE_TYPE_CHOICES,
@@ -75,7 +73,6 @@ class Category(TimeStampedModel):
     )
 
     class Meta:
-        # Updated uniqueness constraint
         unique_together = ('hub', 'service_type', 'slug')
         verbose_name_plural = "categories"
         ordering = ['-updated_at']
@@ -86,7 +83,6 @@ class Category(TimeStampedModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        # Updated to include service type
         return f"{self.get_service_type_display()} - {self.name}"
 
 
@@ -136,7 +132,6 @@ class About(TimeStampedModel):
 
     def __str__(self):
         return self.name
-
 
 '''
 class Brand(TimeStampedModel):
