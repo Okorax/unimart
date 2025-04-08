@@ -4,7 +4,6 @@
 <ul>
     <li><a href="{% url 'home' %}" class="">Home</a></li>
     <li><a href="{% url 'p2p-home' %}">P2P</a></li>
-    <li><a href="#">FreeLance</a></li>
     <li><a href="{% url 'event-home' %}" class="active">Events</a></li>
     <li><a href="{% url 'blog-home' %}">Blogs</a></li>
     <li><a href="{% url 'home' %}#contact">Contact</a></li>
@@ -72,7 +71,7 @@
                         id="product-{{ product.slug }}-footer">
                         {% if product.id in request.user.buy_requests.product %}
                         <button class="btn btn-outline-custom btn-sm py-1 px-2"
-                            hx-post="{% url 'make_request' product.slug %}" 
+                            hx-post="#" 
                             hx-target="#product-{{ product.slug }}-footer"
                             hx-swap="outerHTML" 
                             onclick="event.stopPropagation();">
@@ -80,7 +79,7 @@
                         </button>
                         {% else %}
                         <button class="btn btn-custom btn-sm py-1 px-2" 
-                            hx-post="{% url 'make_request' product.slug %}"
+                            hx-post="#"
                             hx-target="#product-{{ product.slug }}-footer" 
                             hx-swap="outerHTML"
                             onclick="event.stopPropagation();">

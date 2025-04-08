@@ -7,6 +7,7 @@ from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 from utils.models import TimeStampedModel
 from accounts.models import User
+from django.utils.text import slugify
 
 class Product(TimeStampedModel):
     CONDITION_CHOICES = [
@@ -52,6 +53,15 @@ class Product(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name} ({self.get_condition_display()}) - {self.price}"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(f"{self.name} - Product")[:90]
+            slug = base_slug
+            jitter = uuid4().hex[:8]
+            slug = f"{base_slug}-{jitter}"
+            self.slug = slug
+        super().save(*args, **kwargs)
     
     def generate_meta_description(self):
         """Generate a meta description based on available fields."""
@@ -115,13 +125,20 @@ class PurchaseRequest(TimeStampedModel):
         null=True
     )  # Allow negotiation
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
-    message = models.TextField(max_length=500, blank=True)  # Initial message from buyer
 
     class Meta:
         unique_together = ('product', 'buyer')  # Prevent duplicate requests
 
     def __str__(self):
         return f"{self.buyer.username} -> {self.product.name} ({self.status})"
+    
+class Message(TimeStampedModel):
+    purchase_request = models.ForeignKey(PurchaseRequest, on_delete=models.CASCADE, related_name="messages")
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+
+    def __str__(self):
+        return f"{self.sender.username} - message"
 
 # Transaction model to track completed sales
 class Transaction(TimeStampedModel):

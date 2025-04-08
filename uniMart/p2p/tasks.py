@@ -27,7 +27,7 @@ def update_product_search_vectors():
 
     if modified_products.exists():
         # Update search_vector in bulk using the database
-        modified_products.update(search_vector=SearchVector('name', 'descriptions', 'status', 'price', 'condition', 'pickup_location'))
+        modified_products.update(search_vector=SearchVector('name', 'description', 'status', 'price', 'condition', 'pickup_location'))
     
         # Compute meta_keywords and meta_description for each product
         for product in modified_products:

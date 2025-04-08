@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, UserSubscription, Notification
 from .forms import UserRegisterForm
 from unfold.admin import ModelAdmin
 from django.contrib import admin
@@ -40,3 +40,6 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
 
 # Register your models here.
 admin.site.register(User, UserAdmin)
+
+admin.site.register(UserSubscription, ModelAdmin)
+admin.site.register(Notification, ModelAdmin)

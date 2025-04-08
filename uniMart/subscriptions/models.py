@@ -18,8 +18,8 @@ class SubscriptionPlanItem(models.Model):
     def __str__(self):
         return f"{self.plan.name} - {self.content}"
 
-class UserSubscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscriptions")
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="plan_subscriptions")
     plan = models.ForeignKey(SubscriptionPlan, on_delete=models.CASCADE)
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -43,7 +43,7 @@ class PaymentTransaction(models.Model):
         ("success", "Success"),
         ("failed", "Failed"),
     )
-    user_subscription = models.ForeignKey(UserSubscription, on_delete=models.CASCADE, null=True, blank=True)
+    user_subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_ref = models.CharField(max_length=100, unique=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")

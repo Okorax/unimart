@@ -1,3 +1,8 @@
+import hmac
+import hashlib
+import json
+import requests
+import time
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -7,6 +12,8 @@ from django.conf import settings
 from django.utils import timezone
 from .models import SubscriptionPlan, PaymentTransaction
 
+OPAY_SANDBOX_URL = "https://test-api.opayweb.com/api/v3/"  # Try this instead
+
 @login_required
 def subscribe(request, plan_id):
     try:
@@ -15,51 +22,41 @@ def subscribe(request, plan_id):
         return JsonResponse({"error": "Plan not found"}, status=404)
 
     if request.method == "POST":
-        payloaded = {
-            "amount": {
-                "currency": "NGN",
-                "total":400
-            },
-            "reference": f"sub_{request.user.id}_{int(timezone.now().timestamp())}",
-            "product":{"description":"dd","name":"name"},
-            #"customerEmail": request.user.email,
-            "payMethod":"BankTransfer",
-            "UserPhone": "08169976046",
-            #"description": f"Subscription to {plan.name}",
-            "callbackUrl": f"{settings.SITE_URL}/plan/callback/",
-            #"returnUrl": f"{settings.SITE_URL}/plan/success/",
-            #"merchantId": settings.OPAY_MERCHANT_ID,
+        ref = f"dep_{request.user.id}_{int(time.time())}"
+        payload = {
+            "amount": str(int(1000 * 100)),  # Convert to kobo
+            "callbackUrl": "https://yourapp.com/deposit/callback/",
+            "country": "NG",
+            "currency": "NGN",
+            "customerEmail": request.user.email or "test@example.com",
+            "customerPhone": "08012345678",  
+            "description": f"Deposit of ₦1000 to wallet via bank transfer",
+            "paymentMethod": "BANK",           # Set to bank transfer
+            "reference": ref,
+            "returnUrl": "https://yourapp.com/deposit/success/"
         }
 
-        payload={
-    "amount":{
-        "currency":"NGN",
-        "total":400
-    },
-    "callbackUrl":"https://testapi.opaycheckout.com/api/v1/international/print",
-    "country":"NG",
-    "customerName":"customerName",
-    "payMethod":"BankTransfer",
-    "product":{
-        "description":"dd",
-        "name":"name"
-    },
-    "reference":"12345a",
-    "userInfo":{
-            "userEmail":"test@email.com",
-            "userId":"userid001",
-            "userMobile":"+23488889999",
-            "userName":"David"
-    },
-    "userPhone":"+1234567879",
-    "merchantId": settings.OPAY_MERCHANT_ID,
-}
-        headers = {"Authorization": f"Bearer 22763bcdb0260789b61305c183ade61dddb21b74a7b41d76ed487042f7e978f957e544df938a21e89eeb9dc0a4c3cdf561d09eef26c128695c4165fa9f9f9781", "Content-Type": "application/json", "MerchantId": "256612345678901"}
+        payload_string = json.dumps(payload, sort_keys=True, separators=(',', ':'))
+        signature = hmac.new(
+            settings.OPAY_SECRET_KEY.encode(), 
+            payload_string.encode(), 
+            hashlib.sha512
+        ).hexdigest()
+
+        headers = {
+            "Authorization": f"Bearer {settings.OPAY_PUBLIC_KEY}",  # Use public key or token, not signature
+            "MerchantId": settings.OPAY_MERCHANT_ID,
+            "Content-Type": "application/json",
+            #"Signature": signature  # Uncomment if OPay docs specify a Signature header
+        }
 
         try:
-            response = requests.post(f"{settings.OPAY_API_URL}/international/cashier/create", json=payload, headers=headers)
+            #response = requests.post(f"{settings.OPAY_API_URL}/international/cashier/create", json=payload, headers=headers)
+            #data = response.json()
+            response = requests.post(f"{settings.OPAY_API_URL}/international/cashier/create", headers=headers, json=payload)
             data = response.json()
-            print(data)
+            for _ in range(3000):
+                print(data)
             if data.get("code") == "00000":
                 transaction = PaymentTransaction.objects.create(
                     user_subscription=None,

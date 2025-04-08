@@ -56,3 +56,39 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         resize_image.delay(self.image.path)
+
+class UserSubscription(models.Model):
+    SERVICE_TYPE_CHOICES = [
+        ('events', 'Events'),
+        ('p2p', 'P2P'),
+        ('freelance', 'Freelance'),
+        ('blogs', 'Blogs'),
+        ('communities', 'Communities'),
+        ('all', 'All')
+    ]
+    subscriber = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscriptions")
+    subscribed_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name="subscribers")
+    service_type = models.CharField(
+        max_length=20,
+        default="all",
+        choices=SERVICE_TYPE_CHOICES,
+        help_text="The type of service this category belongs to."
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    class Meta:
+        unique_together = ('subscriber', 'subscribed_to')\
+        
+    def __str__(self):
+        return f"{self.subscriber} subscribes to {self.subscribed_to}"
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.message}"
