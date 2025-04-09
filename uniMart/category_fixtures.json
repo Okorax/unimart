@@ -1,0 +1,107 @@
+[
+  {
+    "model": "utils.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Technology",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "technology",
+      "description": "Events focused on tech and innovation.",
+      "meta_keywords": "Technology, events, FUTO, Owerri",
+      "meta_description": "Technology events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.747663+01:00",
+      "updated_at": "2025-04-09T14:29:15.747704+01:00"
+    }
+  },
+  {
+    "model": "utils.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Culture",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "culture",
+      "description": "Cultural celebrations and festivals.",
+      "meta_keywords": "Culture, events, FUTO, Owerri",
+      "meta_description": "Culture events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.747740+01:00",
+      "updated_at": "2025-04-09T14:29:15.747764+01:00"
+    }
+  },
+  {
+    "model": "utils.Category",
+    "pk": 3,
+    "fields": {
+      "name": "Sports",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "sports",
+      "description": "Sporting events and competitions.",
+      "meta_keywords": "Sports, events, FUTO, Owerri",
+      "meta_description": "Sports events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.747795+01:00",
+      "updated_at": "2025-04-09T14:29:15.747817+01:00"
+    }
+  },
+  {
+    "model": "utils.Category",
+    "pk": 4,
+    "fields": {
+      "name": "Education",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "education",
+      "description": "Workshops, seminars, and learning sessions.",
+      "meta_keywords": "Education, events, FUTO, Owerri",
+      "meta_description": "Education events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.747843+01:00",
+      "updated_at": "2025-04-09T14:29:15.747890+01:00"
+    }
+  },
+  {
+    "model": "utils.Category",
+    "pk": 5,
+    "fields": {
+      "name": "Health",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "health",
+      "description": "Health awareness and wellness events.",
+      "meta_keywords": "Health, events, FUTO, Owerri",
+      "meta_description": "Health events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.747916+01:00",
+      "updated_at": "2025-04-09T14:29:15.747936+01:00"
+    }
+  },
+  {
+    "model": "utils.Category",
+    "pk": 6,
+    "fields": {
+      "name": "Business",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "business",
+      "description": "Networking and entrepreneurship events.",
+      "meta_keywords": "Business, events, FUTO, Owerri",
+      "meta_description": "Business events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.747963+01:00",
+      "updated_at": "2025-04-09T14:29:15.747983+01:00"
+    }
+  },
+  {
+    "model": "utils.Category",
+    "pk": 7,
+    "fields": {
+      "name": "Arts",
+      "hub": 1,
+      "service_type": "events",
+      "slug": "arts",
+      "description": "Art exhibitions, concerts, and performances.",
+      "meta_keywords": "Arts, events, FUTO, Owerri",
+      "meta_description": "Arts events at FUTO and Owerri.",
+      "created_at": "2025-04-09T14:29:15.748007+01:00",
+      "updated_at": "2025-04-09T14:29:15.748026+01:00"
+    }
+  }
+]

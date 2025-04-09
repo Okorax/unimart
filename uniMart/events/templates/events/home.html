@@ -4,6 +4,7 @@
 <ul>
     <li><a href="{% url 'home' %}" class="">Home</a></li>
     <li><a href="{% url 'p2p-home' %}">P2P</a></li>
+    {% if request.user.is_authenticated %}
     <li class="dropdown"><a href="{% url 'event-home' %}" class="active"><span>Events</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
         <ul>
           <li><a href="#">Create Events</a></li>
@@ -12,6 +13,9 @@
           <li><a href="#">Dropdown 4</a></li>
         </ul>
       </li>
+      {% else %}
+      <li><a href="{% url 'event-home' %}">Events</a></li>
+      {% endif %}
     <li><a href="{% url 'blog-home' %}">Blogs</a></li>
     <li><a href="{% url 'home' %}#contact">Contact</a></li>
     <li><a href="{% url 'about' %}">About</a></li>
@@ -27,26 +31,20 @@
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li class="current">Events</li>
             </ol>
-            <span class="ms-auto">
-                <form action="{% url 'event-search' %}" method="get">
-                    <div class="row">
-                        <div class="col">
-                            <input class="form-control form-control-sm form-control-custom" type="search" name="events-search" id="events-search" />
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-outline-custom btn-sm" type="submit">Search <i class="bi bi-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </span>
         </div>
     </nav>
 </div>
 
 <section id="blog-posts" class="blog-posts">
+    <div class="d-flex justify-content-center">
+        <form action="{% url 'event-search' %}" method="get">
+                <input class="form-control form-control-sm form-control-custom mw-100" type="search" name="events-search" id="events-search" />
+                <button class="btn btn-outline-custom btn-sm" type="submit">Search <i class="bi bi-search"></i></button>
+        </form>
+    </div>
     <div class="container mt-0">
         <div class="row gy-4">
-            {% for event in events %}
+            {% for event in events %}               
             <div class="col-12 col-lg-3 py-4">
                 <div class="card event-card shadow border-0 h-100" style="cursor: pointer;"
                     data-url="{% url 'event-detail' event.slug %}"
@@ -76,7 +74,9 @@
                         {% endif %}
                     </div>
                     <div class="card-body">
-                        <span class="badge bg-accent mb-2">{{ event.category.name }}</span>
+                        <span class="badge bg-accent mb-2"  
+                        data-url="{% url 'event-home'  %}?category={{ event.category.slug }}"
+                        onclick="window.location.href=this.getAttribute('data-url');">{{ event.category.name }}</span>
                         <h5 class="card-title mb-1">{{ event.name }}</h5>
                         <div class="d-flex align-items-center mb-1">
                             <i class="bi bi-calendar-date me-1 text-muted" style="font-size: 0.9rem;"></i>
@@ -86,12 +86,17 @@
                             <i class="bi bi-geo-alt me-1 text-muted" style="font-size: 0.9rem;"></i>
                             <span class="small">{{ event.venue }}</span>
                         </div>
-                        <div class="d-flex align-items-center border-top pt-2">
-                            <img src="{{ event.organizer.image.url }}" class="rounded-circle me-2" alt="Organizer"
-                                style="width: 36px; height: 36px;">
-                            <div>
-                                <div class="small text-muted">Hosted by</div>
-                                <div class="fw-bold small">{{ event.organizer.username }}</div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-2">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ event.organizer.image.url }}" class="rounded-circle me-2" alt="Organizer"
+                                    style="width: 36px; height: 36px;">
+                                <div>
+                                    <div class="small text-muted">Hosted by</div>
+                                    <div class="fw-bold small">{{ event.organizer.username }}</div>
+                                </div>
+                            </div>
+                            <div class="me-0">
+                                <i class=" bi bi-bell"></i>
                             </div>
                         </div>
                     </div>

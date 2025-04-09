@@ -51,12 +51,14 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
           </nav>
           
-          {% if not user.is_authenticated %}
-          <a class="btn-getstarted" href="{% url 'accounts-register' %}">Sign Up</a>
+          {% if user.is_authenticated %}
+          <form action="{% url 'accounts-logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-getstarted">Sign Out</button>
+          </form>
           {% else %}
-          <a class="btn-getstarted" href="#">Sign Out</a>
+          <a class="btn-getstarted" href="{% url 'accounts-register' %}">Sign Up</a>
           {% endif %}
-
         </div>
     </header>
     

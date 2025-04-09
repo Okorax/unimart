@@ -4,26 +4,6 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.postgres.search import SearchQuery
 
-# Create your views here.
-'''
-def home(request):
-    q = request.GET.get("category")
-
-    print(q)
-
-    events = Event.objects.all().select_related('organizer').annotate(attendee_count=Count('attendees')) \
-       if q is None else Event.objects.all().filter(category__slug=q).select_related('organizer').annotate(attendee_count=Count('attendees'))
-
-    if request.user.is_authenticated:
-        attending_event_ids = list(request.user.events_attending.values_list('id', flat=True))
-    else:
-        attending_event_ids = []
-    return render(request, 'events/home.html', {
-        'events': events,
-        'attending_event_ids': attending_event_ids
-    })
-'''
-
 def home(request):
     category_slug = request.GET.get("category")
 
@@ -42,7 +22,7 @@ def home(request):
     )
 
     return render(request, 'events/home.html', {
-        'events': events,
+        'events': events[:40],
         'attending_event_ids': attending_event_ids
     })
 
