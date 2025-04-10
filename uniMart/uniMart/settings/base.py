@@ -183,6 +183,9 @@ OPAY_SECRET_KEY = "OPAYPRV17436508244090.8412693639224904"
 OPAY_API_URL = "https://testapi.opaycheckout.com/api/v1"
 SITE_URL = "http://localhost:8000"  # Update to your production URL later
 
+PAYSTACK_PUBLIC_KEY = "pk_live_f60e374ff12a60fb4675d73e742f8b18777f8820"
+PAYSTACK_PRIVATE_KEY = "sk_live_40eae9121c13547e62b6eeafa40ebeed078c7afd"
+
 '''
 if not env('DEBUG'):
     EMAIL_BACKEND = env('EMAIL_BACKEND')

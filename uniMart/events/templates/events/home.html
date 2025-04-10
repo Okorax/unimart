@@ -9,7 +9,7 @@
         <ul>
           <li><a href="#">Create Events</a></li>
           <li><a href="#">My Events</a></li>
-          <li><a href="#">Subcribed Events</a></li>
+          <li><a href="{% url 'my_event' %}">Subcribed Events</a></li>
           <li><a href="#">Dropdown 4</a></li>
         </ul>
       </li>
@@ -36,12 +36,18 @@
 </div>
 
 <section id="blog-posts" class="blog-posts">
-    <div class="d-flex justify-content-center">
+    <span class="d-flex justify-content-center">
         <form action="{% url 'event-search' %}" method="get">
-                <input class="form-control form-control-sm form-control-custom mw-100" type="search" name="events-search" id="events-search" />
-                <button class="btn btn-outline-custom btn-sm" type="submit">Search <i class="bi bi-search"></i></button>
+            <div class="row">
+                <div class="col" style="width: 375px;">
+                    <input class="form-control form-control-sm form-control-custom" type="search" name="events-search" id="events-search" />
+                </div>
+                <div class="col">
+                    <button class="btn btn-outline-custom btn-sm" type="submit">Search <i class="bi bi-search"></i></button>
+                </div>
+            </div>
         </form>
-    </div>
+    </span>
     <div class="container mt-0">
         <div class="row gy-4">
             {% for event in events %}               
